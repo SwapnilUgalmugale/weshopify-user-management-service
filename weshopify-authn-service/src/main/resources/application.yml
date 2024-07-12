@@ -1,0 +1,23 @@
+spring:
+  application:
+         name: weshopify-authn-service
+         
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: Redis123$
+
+server:
+  port: 5022
+  
+weshopify-platform:
+  oauth2:
+    uri: https://localhost:9443/oauth2/token
+    logoutUri: https://localhost:9443/oauth2/revoke
+    grant_type: password
+    scope: openid
+    clientId: PffUznY2IbUW8YyA6bl5XWyvKF8a
+    clientSecrete: pHjmo5WlnONbhoqxd2Skwk0eOZMa
+
+  
