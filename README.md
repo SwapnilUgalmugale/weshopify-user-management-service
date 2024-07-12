@@ -1,0 +1,1 @@
+# weshopify-user-management-service
