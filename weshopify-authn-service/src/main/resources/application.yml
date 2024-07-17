@@ -15,6 +15,7 @@ weshopify-platform:
   oauth2:
     uri: https://localhost:9443/oauth2/token
     logoutUri: https://localhost:9443/oauth2/revoke
+    userInfoUri: https://localhost:9443/oauth2/userinfo?schema=
     grant_type: password
     scope: openid
     clientId: PffUznY2IbUW8YyA6bl5XWyvKF8a

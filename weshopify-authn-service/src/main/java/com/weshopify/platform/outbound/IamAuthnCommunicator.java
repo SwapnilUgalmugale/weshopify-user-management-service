@@ -52,6 +52,9 @@ public class IamAuthnCommunicator {
 
 	@Value("${weshopify-platform.oauth2.logoutUri}")
 	private String logoutUri;
+	
+	@Value("${weshopify-platform.oauth2.userInfoUri}")
+	private String userInfoUri;
 
 	public String authenticate(WSO2UserAuthnBean authnBean) {
 		log.info("uri is:\t" + authnBean);
@@ -77,6 +80,29 @@ public class IamAuthnCommunicator {
 			e.printStackTrace();
 		} catch (Exception e) {
 			log.info("Authentication error: ", e);
+		}
+
+		return Optional.ofNullable(respData).get();
+	}
+	public String getUserProfile(String accessToken) {
+		userInfoUri = userInfoUri+scope;
+		log.info("uri is:\t" + userInfoUri);
+		String respData = null;
+		try {
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Authorization", "Bearer " + accessToken);
+			HttpEntity<String> requestBody = new HttpEntity<String>(headers);
+
+			ResponseEntity<String> response = restTemplate.exchange(userInfoUri, HttpMethod.GET, requestBody, String.class);
+			log.info("status code is:\t" + response.getStatusCode().value());
+
+			if (HttpStatus.OK.value() == response.getStatusCode().value()) {
+				respData = response.getBody();
+				log.info("response body is:\t" + respData);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return Optional.ofNullable(respData).get();

@@ -13,7 +13,7 @@ import com.weshopify.platform.bean.UserAuthnBean;
 import com.weshopify.platform.model.WSO2UserAuthnBean;
 import com.weshopify.platform.outbound.IamAuthnCommunicator;
 
-import io.swagger.v3.core.util.Json;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -39,13 +39,22 @@ public class UserAuthnServiceImpl implements UserAuthnService {
 		String authnResponse = authnComm.authenticate(wso2AuthnBean);
 		log.info("authentication response is {}", authnResponse);
 		JSONObject json = new JSONObject(authnResponse);
-		String access_token = json.getString("access_token");
+		String access_token = json.getString("access_token"); 
 		log.info("access token is:\t" + access_token);
+		
+		int expiry = json.getInt("expires_in");
 		if (StringUtils.isNotEmpty(authnResponse)) {
 			String randomHash = authnBean.getUserName() + "_" + RandomStringUtils.random(512);
 			log.info("token hash is {}" + randomHash);
 			hashOps.put(authnBean.getUserName(), randomHash, access_token);
-			hashOps.put(access_token, randomHash, authnBean.getUserName());
+			hashOps.put("SUBJECT",access_token, authnBean.getUserName());
+			hashOps.put("tokenExpiry", access_token, String.valueOf(expiry));
+			
+			String jsonRes = authnComm.getUserProfile(access_token);
+			JSONObject userInfoObject = new JSONObject(jsonRes);
+			String roles = userInfoObject.getString("roles"); 
+
+			hashOps.put("USER_ROLES",access_token, roles);
 		}
 		return authnResponse;
 	}
@@ -60,7 +69,9 @@ public class UserAuthnServiceImpl implements UserAuthnService {
 				String userName = hashOps.get(token, randomHash);
 				log.info("User Name to be log out is:\t" + userName);
 				hashOps.delete(userName, randomHash);
-				hashOps.delete(token, randomHash);
+				hashOps.delete("SUBJECT", token);
+				hashOps.delete("tokenExpiry", token);
+				hashOps.delete("USER_ROLES", token);
 				String logoutMessage = "user " + userName + " have been logout successfully";
 				json.put("message", logoutMessage);
 			});
