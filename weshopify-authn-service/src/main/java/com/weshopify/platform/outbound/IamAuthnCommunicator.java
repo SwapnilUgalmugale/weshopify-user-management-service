@@ -80,7 +80,7 @@ public class IamAuthnCommunicator {
 			e.printStackTrace();
 		} catch (Exception e) {
 			log.info("Authentication error: ", e);
-		}
+		} 
 
 		return Optional.ofNullable(respData).get();
 	}
