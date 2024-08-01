@@ -9,11 +9,16 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -112,9 +117,14 @@ public class JwtAuthenticationService {
 
 	private String resolveToken(HttpServletRequest request) {
 		String headerValue = request.getHeader(JWT_TOKEN_HEADER_NAME);
-		headerValue = headerValue.replace(JWT_TOKEN_TYPE, "");
-		log.info("jwt token is {}", headerValue);
-		return headerValue;
+		if(StringUtils.hasText(headerValue)) {
+			headerValue = headerValue.replace(JWT_TOKEN_TYPE, "");
+			log.info("jwt token is {}", headerValue);
+			return headerValue;
+		}else {
+			throw Unauthorized.create("No Token Provided",HttpStatus.FORBIDDEN, "Forbidden", null, null, null);
+		}
+		
 	}
 
 	public Date expiryDate(long tokenExpiry) {

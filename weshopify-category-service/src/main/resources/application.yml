@@ -1,12 +1,20 @@
 spring:
   application:
          name: weshopify-category-service
-         
+  datasource:
+         username: '${CATEGORIES_DB_USER:root}'
+         password: '${CATEGORIES_DB_PASSWORD:manager}'
+         url: 'jdbc:${CATEGORIES_DB_TYPE:mysql}://${CATEGORIES_DB_HOST:localhost}:${CATEGORIES_DB_PORT:3306}/${CATEGORIES_DB_SCHEMA:weshopify_categories_service}'
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true 
   data:
      redis:
       host: 127.0.0.1
       port: 6379
       password: Redis123$
+      
          
 server:
   port: 5016

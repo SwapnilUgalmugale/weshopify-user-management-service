@@ -19,7 +19,7 @@ public class CategoryBean implements Serializable {
 	private int id;
 	private String name;
 	private String alias;
-	private String pcategory;
+	private int pcategory;
 	private boolean enabled;
 
 }

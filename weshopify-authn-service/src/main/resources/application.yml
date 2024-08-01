@@ -12,6 +12,8 @@ server:
   port: 5022
   
 weshopify-platform:
+  scim2:
+    usersUri: https://localhost:9443/scim2/Users/
   oauth2:
     uri: https://localhost:9443/oauth2/token
     logoutUri: https://localhost:9443/oauth2/revoke
