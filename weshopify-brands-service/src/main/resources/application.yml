@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: weshopify-brands-service
+
+  data:
+    mongodb:
+#      host: cluster0.qtgiwqr.mongodb.net
+#      port: 27017
+#      username: mongo 
+#      password: mongo
+      database: weshopify-brands-service
+      uri: mongodb+srv://mongo:mongo@cluster0.qtgiwqr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+
+server:
+  port: 5017
