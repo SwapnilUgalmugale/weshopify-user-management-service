@@ -6,7 +6,7 @@ import com.weshopify.platform.bean.CategoryBean;
 
 public interface CategoryService {
 
-	CategoryBean createcategory(CategoryBean catBean);
+	CategoryBean createCategory(CategoryBean catBean);
 
 	CategoryBean updateCategory(CategoryBean catBean);
 

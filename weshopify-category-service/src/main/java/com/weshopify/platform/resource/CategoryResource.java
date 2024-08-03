@@ -43,7 +43,7 @@ public class CategoryResource {
 	@Operation(summary = "createCategory", security = @SecurityRequirement(name = "bearerAuth"))
 	@PostMapping("/categories")
 	public ResponseEntity<CategoryBean> createCategory(@RequestBody CategoryBean catBean){
-		return ResponseEntity.ok(catService.createcategory(catBean));
+		return ResponseEntity.ok(catService.createCategory(catBean));
 	}
 	
 	@Operation(summary = "updateCategory", security = @SecurityRequirement(name = "bearerAuth"))

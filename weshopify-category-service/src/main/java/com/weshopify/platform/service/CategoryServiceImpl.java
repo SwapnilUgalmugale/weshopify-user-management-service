@@ -23,7 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public CategoryBean createcategory(CategoryBean catBean) {
+	public CategoryBean createCategory(CategoryBean catBean) {
 
 		return convertEntityToBean(catRepo.save(convertBeanToEntity(catBean)));
 	}
