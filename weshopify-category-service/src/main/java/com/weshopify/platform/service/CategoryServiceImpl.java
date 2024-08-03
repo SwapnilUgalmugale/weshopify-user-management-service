@@ -110,11 +110,18 @@ public class CategoryServiceImpl implements CategoryService {
 
 	private CategoryBean convertEntityToBean(Category catEntity) {
 
-		CategoryBean catBean = CategoryBean.builder().alias(catEntity.getAlias()).name(catEntity.getName())
-				.id(catEntity.getId()).enabled(catEntity.isEnabled()).pcategory(catEntity.getParent().getId()).build();
+		CategoryBean catBean = new CategoryBean();
+				catBean.setAlias(catEntity.getAlias());
+				catBean.setName(catEntity.getName());
+				catBean.setId(catEntity.getId());
+				catBean.setEnabled(catEntity.isEnabled());
+				 if (catEntity.getParent() != null) {
+				        catBean.setPcategory(catEntity.getParent().getId());
+				    } else {
+				        catBean.setPcategory(null); // Explicitly set as null if there's no parent
+				    }
 
-		return catBean;
-
+				    return catBean;
 	}
 
 }

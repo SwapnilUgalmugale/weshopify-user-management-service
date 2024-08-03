@@ -1,8 +1,10 @@
 package com.weshopify.platform.config;
 
+import org.antlr.v4.runtime.atn.SemanticContext.AND;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
@@ -17,9 +19,19 @@ public class AppSecurityConfig {
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authorize -> authorize
-                .anyRequest().authenticated()).addFilterBefore(new JwtAuthnFilter(authnService), BasicAuthenticationFilter.class);
-//            .httpBasic(Customizer.withDefaults())
+            .authorizeHttpRequests(authorize -> {
+				try {
+					authorize
+						//.requestMatchers(HttpMethod.POST, "/categories/**").permitAll()
+					    .anyRequest().authenticated()
+					    .and().csrf().disable().anonymous().disable()
+					    .addFilterBefore(new JwtAuthnFilter(authnService), BasicAuthenticationFilter.class);
+					    //.httpBasic();
+				} catch (Exception e) {
+					
+					e.printStackTrace();
+				}
+			});
 //            .formLogin(Customizer.withDefaults());
         return http.build();
     }
