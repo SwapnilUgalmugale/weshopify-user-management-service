@@ -7,14 +7,14 @@ import com.weshopify.platform.bean.BrandsBean;
 
 public interface BrandsService {
 
-	BrandsBean createBrand(BrandsBean catBean);
+	BrandsBean createBrand(BrandsBean brandsBean);
 
-	BrandsBean updateBrand(BrandsBean catBean);
+	BrandsBean updateBrand(BrandsBean brandsBean);
 
 	List<BrandsBean> findAllBrands();
 
-	BrandsBean findBrandById(int catId);
+	BrandsBean findBrandById(int brandId);
 
-	List<BrandsBean> deleteBrand(int catId);
+	List<BrandsBean> deleteBrand(int brandId);
 
 }
