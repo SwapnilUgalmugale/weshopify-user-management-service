@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 
 @Configuration
 @OpenAPIDefinition(info = @Info(title = "Categories Service", version = "v1"))
-@SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
+@SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "Bearer")
 public class OpenApi3Config {
 
 }
