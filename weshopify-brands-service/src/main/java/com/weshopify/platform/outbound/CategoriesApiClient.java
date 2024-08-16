@@ -1,5 +1,8 @@
 package com.weshopify.platform.outbound;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -10,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
@@ -22,16 +26,16 @@ public class CategoriesApiClient {
 	@Value("${services.categories.base-uri}")
 	private String categoriesUri;
 	
-	@Value("${services.categories.access-token}")
-	private String accessToken;
+	@Autowired
+	private HttpServletRequest request;
 	
 	public String findCategoryById(String access_token,int catId) {
 		/**
 		 * step-1: Prepare the Authorization Header
 		 */
-		
+		String headerWithBearer = request.getHeader(HttpHeaders.AUTHORIZATION);
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization","Bearer "+accessToken);
+		headers.add(HttpHeaders.AUTHORIZATION, headerWithBearer);
 		
 		/**
 		 * step-2: Prepare the Request Body

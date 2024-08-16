@@ -16,5 +16,7 @@ public interface BrandsService {
 	BrandsBean findBrandById(int brandId);
 
 	List<BrandsBean> deleteBrand(int brandId);
+	
+	void cleanDb();
 
 }

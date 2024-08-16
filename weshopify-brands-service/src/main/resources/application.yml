@@ -10,10 +10,17 @@ spring:
 #      password: mongo
       database: weshopify-brands-service
       uri: mongodb+srv://mongo:mongo@cluster0.qtgiwqr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      auto-index-creation: true 
       
   cloud:
     loadbalancer:
       enabled: true
+      
+spring.data:
+     redis:
+      host: 127.0.0.1
+      port: 6379
+      password: Redis123$
 
 
 server:

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.weshopify.platform.bean.CategoryBean;
@@ -20,6 +21,7 @@ public class Brands implements Serializable {/**
 	@Id
 	private String id;
 	
+	@Indexed(unique = true)
 	private String name;
 	
 	private String logoPath;
