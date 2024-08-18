@@ -2,11 +2,15 @@ package com.weshopify.platform.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
+import org.apache.commons.lang.RandomStringUtils;
+import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
 import com.weshopify.platform.bean.CategoryBean;
+import com.weshopify.platform.cqrs.commands.CategoryCommand;
 import com.weshopify.platform.model.Category;
 import com.weshopify.platform.repo.CategoriesRepository;
 
@@ -17,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 public class CategoryServiceImpl implements CategoryService {
 
 	private CategoriesRepository catRepo;
+	
+	@Autowired
+	private CommandGateway commandBus;
 
 	public CategoryServiceImpl(CategoriesRepository catRepo) {
 		this.catRepo = catRepo;
@@ -30,8 +37,16 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public CategoryBean updateCategory(CategoryBean catBean) {
-
-		return convertEntityToBean(catRepo.save(convertBeanToEntity(catBean)));
+		catBean = convertEntityToBean(catRepo.save(convertBeanToEntity(catBean)));
+		CategoryCommand catCommand = createCommand(catBean);
+		log.info("Step-1: Command Sending to the Command Handler");
+		CompletableFuture<CategoryCommand> future = commandBus.send(catCommand);
+		if(future.isDone()) {
+			log.info("Category updates were delivered to consumer services");
+		}else {
+			log.error("Category updates were not delivered to consumers. They may retry the event store ");
+		}
+		return catBean;
 	}
 
 	@Override
@@ -109,7 +124,6 @@ public class CategoryServiceImpl implements CategoryService {
 	 */
 
 	private CategoryBean convertEntityToBean(Category catEntity) {
-
 		CategoryBean catBean = new CategoryBean();
 				catBean.setAlias(catEntity.getAlias());
 				catBean.setName(catEntity.getName());
@@ -122,6 +136,24 @@ public class CategoryServiceImpl implements CategoryService {
 				    }
 
 				    return catBean;
+	}
+	/**
+	 * Converting the updated bean to command
+	 * command user for creating events
+	 * @param catBean
+	 * @return
+	 */
+	private CategoryCommand createCommand(CategoryBean catBean) {
+		CategoryCommand catCommand = new CategoryCommand ();
+		catCommand.setAlias(catBean.getAlias());
+		catCommand.setName(catBean.getName());
+		String randomId = RandomStringUtils.randomAlphanumeric(17).toUpperCase();
+		catCommand.setId(randomId);
+		catCommand.setEnabled(catBean.isEnabled());
+		catCommand.setPcategory(catBean.getPcategory());
+
+		    return catCommand;
+		 
 	}
 
 }
