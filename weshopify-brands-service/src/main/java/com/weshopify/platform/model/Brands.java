@@ -2,6 +2,7 @@ package com.weshopify.platform.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -26,6 +27,6 @@ public class Brands implements Serializable {/**
 	
 	private String logoPath;
 	
-	private List<CategoryBean> categories;
+	private Set<CategoryBean> categories;
 
 }

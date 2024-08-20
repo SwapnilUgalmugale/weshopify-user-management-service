@@ -2,6 +2,7 @@ package com.weshopify.platform.bean;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import lombok.Data;
 
@@ -21,5 +22,5 @@ public class BrandsBean implements Serializable {/**
 	
 	//private List<String> categories;
 
-	private List<CategoryBean> categories;
+	private Set<CategoryBean> categories;
 }

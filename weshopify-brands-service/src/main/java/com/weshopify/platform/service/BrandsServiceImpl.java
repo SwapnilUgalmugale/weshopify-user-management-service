@@ -2,8 +2,10 @@ package com.weshopify.platform.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +22,6 @@ import com.weshopify.platform.bean.BrandsBean;
 import com.weshopify.platform.bean.CategoryBean;
 import com.weshopify.platform.exceptions.APIException;
 import com.weshopify.platform.model.Brands;
-import com.weshopify.platform.outbound.CategoriesApiClient;
 import com.weshopify.platform.outbound.CategoriesApiFeignClient;
 import com.weshopify.platform.repository.BrandsRepo;
 
@@ -143,7 +144,7 @@ public class BrandsServiceImpl implements BrandsService {
 		 * Invoke the category service and fetch the categories from categories service
 		 */
 		if (!CollectionUtils.isEmpty(brandsBean.getCategories())) {
-			List<CategoryBean> orignalCats = new ArrayList<CategoryBean>();
+			Set<CategoryBean> orignalCats = new HashSet<CategoryBean>();
 			String headerWithBearer = request.getHeader(HttpHeaders.AUTHORIZATION);
 			Map<String, String> headerMap = new HashMap<>();
 			headerMap.put(HttpHeaders.AUTHORIZATION, headerWithBearer);

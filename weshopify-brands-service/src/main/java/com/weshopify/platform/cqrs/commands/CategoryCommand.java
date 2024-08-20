@@ -22,8 +22,7 @@ public class CategoryCommand implements Serializable {
 	private static final long serialVersionUID = -6674937149851038361L;
 	
 	@AggregateIdentifier // annotation that identifies the member containing the identifier of the Aggregate.
-	private String eventId;
-	private int id;
+	private String id;
 	private String name;
 	private String alias;
 	private Integer pcategory;
