@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: weshopify-platform-services-registry
+  cloud:
+    loadbalancer:
+      enabled: true
+
+server:
+  port: 8761
+  
+#eureka:
+#  client:
+#    eureka-server-port: 5011
