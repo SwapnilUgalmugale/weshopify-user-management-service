@@ -1,0 +1,90 @@
+version: '3.9'
+services:
+  weshopify-categories-db-svc:
+   container_name: weshopify-categories-db
+   image: mysql:latest
+   restart: always
+   ports:
+     - 3306:3306
+   environment:
+     - MYSQL_ROOT_PASSWORD=manager
+     - MYSQL_DATABASE=weshopify-categories
+
+  weshopify-registry-svc:
+   container_name: weshopify-registry
+   image: weshopify-service-registry-img:latest
+   restart: on-failure
+   ports:
+     - 8761:8761
+
+  weshopify-axon-server:
+   container_name: weshopify-axon-server
+   image: axoniq/axonserver
+   ports:
+     - 8124:8124
+     - 8024:8024
+
+  weshopify-authn-svc:
+   container_name: weshopify-authn-service
+   image: weshopify-auth-svc-img   
+   restart: on-failure
+   ports:
+     - 5022:5022
+   environment:
+    - WSO2_SERVER_HOST_NAME=host.docker.internal:9443
+    - GRANT_TYPE=password
+    - SCOPE=openid
+    - CLIENT_ID=PffUznY2IbUW8YyA6bl5XWyvKF8a
+    - CLIENT_SECRETE=pHjmo5WlnONbhoqxd2Skwk0eOZMa
+    - REDIS_SERVER_HOST=host.docker.internal
+    - REDIS_SERVER_PORT=6379
+    - REDIS_SERVER_PASSWORD=Redis123$
+    - AUTHN_SERVICE_PORT=5022
+
+  weshopify-categories-svc:
+   container_name: weshopify-categories-svc
+   image: weshopify-categories-svc-img
+   restart: on-failure
+   ports:
+     - 5016:5016
+   environment:
+    - CATEGORIES_DB_HOST=weshopify-categories-db-svc
+    - CATEGORIES_DB_PASSWORD=manager
+    - CATEGORIES_DB_SCHEMA=weshopify-categories
+    - REDIS_SERVER_HOST=host.docker.internal
+    - REDIS_SERVER_PORT=6379docker 
+    - REDIS_SERVER_PASSWORD=Redis123$
+    - SERVICE_REGISTRY_HOST=weshopify-registry-svc
+    - SERVICE_REGISTRY_PORT=8761
+    - AXON_SERVER_HOST=weshopify-axon-server
+    - AXON_SERVER_PORT=8124
+
+  weshopify-brands-svc:
+   container_name: weshopify-brands-svc
+   image: weshopify-brands-svc-img 
+   restart: on-failure
+   ports:
+     - 5017:5017
+   environment:
+    - MONGO_DB_URI=mongodb+srv://mongo:mongo@cluster0.qtgiwqr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+    - MONGO_AUTO_INDEX_CREATION=true
+    - REDIS_SERVER_HOST=host.docker.internal
+    - REDIS_SERVER_PORT=6379  
+    - REDIS_SERVER_PASSWORD=Redis123$
+    - SERVICE_REGISTRY_HOST=weshopify-registry-svc
+    - SERVICE_REGISTRY_PORT=8761
+    - AXON_SERVER_HOST=weshopify-axon-server
+    - AXON_SERVER_PORT=8124
+    - CATEGORIES_SVC_HOST=localhost
+    - CATEGORIES_SVC_PORT=5016
+
+  weshopify-user-mgmt-svc:
+    container_name: weshopify-user-mgmt-svc
+    image: weshopify-user-mgmt-img 
+    restart: on-failure
+    ports:
+      - 5014:5014
+    environment:
+      - WSO2_SERVER_HOST_NAME=host.docker.internal:9443
+      - WSO2_SERVER_USER_NAME=admin
+      - WSO2_SERVER_USER_PASSWORD=admin
