@@ -1,24 +1,24 @@
 #spring.application.name=weshopify-user-management-service
 
 server:
-  port: 5014
+  port: ${USER_SVC_PORT:5014}
   
 spring:
   application:
-    name: user-management-service
+    name: ${USER_SVC_NAME:user-management-service}
  
 # swagger-ui custom path
 springdoc:
   swagger-ui:
-      path: /swagger-ui.html
+      path: ${USER_SWAGGER_PATH:/swagger-ui.html}
 
 
 iam-server:
-  base-url: https://localhost:9443/scim2
+  base-url: https://${WSO2_SERVER_HOST_NAME:host.docker.internal:9443}/scim2
   role-api: /Roles
   user-api: /Users
-  user-name: admin
-  password: admin
+  user-name: ${WSO2_SERVER_USER_NAME:admin}
+  password: ${WSO2_SERVER_USER_PASSWORD:admin}
   role-api-schema: "urn:ietf:params:scim:schemas:core:2.0:Role"
   
   

@@ -1,26 +1,31 @@
 spring:
   application:
-         name: weshopify-authn-service
+         name: ${APP_NAME:weshopify-authn-service}
          
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
-      password: Redis123$
+      #host: ${REDIS_SERVER_HOST:127.0.0.1}
+      host: ${REDIS_SERVER_HOST:host.docker.internal}
+      port: ${REDIS_SERVER_PORT:6379}
+      password: ${REDIS_SERVER_PASSWORD:Redis123$}
 
 server:
-  port: 5022
+  port: ${AUTHN_SERVICE_PORT:5022}
   
 weshopify-platform:
   scim2:
-    usersUri: https://localhost:9443/scim2/Users/
+    #usersUri: https://localhost:9443/scim2/Users/
+    usersUri: https://${WSO2_SERVER_HOST_NAME:host.docker.internal:9443}/scim2/Users/ 
   oauth2:
-    uri: https://localhost:9443/oauth2/token
-    logoutUri: https://localhost:9443/oauth2/revoke
-    userInfoUri: https://localhost:9443/oauth2/userinfo?schema=
-    grant_type: password
-    scope: openid
-    clientId: PffUznY2IbUW8YyA6bl5XWyvKF8a
-    clientSecrete: pHjmo5WlnONbhoqxd2Skwk0eOZMa
+    #uri: https://localhost:9443/oauth2/token
+    #logoutUri: https://localhost:9443/oauth2/revoke
+    #userInfoUri: https://localhost:9443/oauth2/userinfo?schema=
+    uri: https://${WSO2_SERVER_HOST_NAME:host.docker.internal:9443}/oauth2/token        
+    logoutUri: https://${WSO2_SERVER_HOST_NAME:host.docker.internal:9443}/oauth2/revoke 
+    userInfoUri: https://${WSO2_SERVER_HOST_NAME:host.docker.internal:9443}/oauth2/userinfo?schema= 
+    grant_type: ${GRANT_TYPE:password}
+    scope: ${SCOPE:openid}
+    clientId: ${CLIENT_ID:PffUznY2IbUW8YyA6bl5XWyvKF8a}
+    clientSecrete: ${CLIENT_SECRETE:pHjmo5WlnONbhoqxd2Skwk0eOZMa}
 
   
